@@ -118,7 +118,9 @@ class Line extends Component {
       width,
       height,
       buildPath,
-      strokeWidth
+      strokeWidth,
+      children = [],
+      id = ""
     } = this.props
 
     const { pressed, hover } = this.state
@@ -135,7 +137,7 @@ class Line extends Component {
     const startLineString = buildLineString(line.coordinates.start)
     const endLineString = buildLineString(line.coordinates.end)
 
-    const radians = Math.PI/2, degrees = 90
+    const radians = Math.PI / 2, degrees = 90
     const isGlobe = projection.clipAngle && projection.clipAngle() === degrees
     const isHidden = isGlobe && (geoLength(startLineString) > radians || geoLength(endLineString) > radians)
 
@@ -154,11 +156,12 @@ class Line extends Component {
         transform={`${scale}`}
         style={
           style[
-            isHidden
-              ? "hidden"
-              : pressed || hover ? (pressed ? "pressed" : "hover") : "default"
-            ]
+          isHidden
+            ? "hidden"
+            : pressed || hover ? (pressed ? "pressed" : "hover") : "default"
+          ]
         }
+        id={id}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onMouseDown={this.handleMouseDown}
@@ -170,7 +173,9 @@ class Line extends Component {
         tabIndex={tabable ? 0 : -1}
         d={path}
         strokeWidth={strokeWidth}
-      />
+      >
+        {children}
+      </path>
     )
   }
 }
